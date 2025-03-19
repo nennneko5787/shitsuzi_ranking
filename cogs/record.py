@@ -11,7 +11,7 @@ class RecordCog(commands.Cog):
         self.records: Dict[int, int] = {}
 
     async def cog_load(self):
-        async with aiofiles.open("./records.json") as f:
+        async with aiofiles.open("records.json") as f:
             print(await f.read())
             self.records = json.loads(await f.read())
 
@@ -31,7 +31,7 @@ class RecordCog(commands.Cog):
         message = await self.bot.wait_for("message", check=check)
         self.records[message.author.id] = self.records.get(message.author.id, 0) + 1
 
-        async with aiofiles.open("./records.json", "w+") as f:
+        async with aiofiles.open("records.json", "w+") as f:
             await f.write(json.dumps(self.records))
 
         await channel.send(f"{message.author.mention} さんが**{self.records[message.author.id]}**回目のコインロール獲得です！")
