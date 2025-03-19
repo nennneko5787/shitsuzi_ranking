@@ -12,7 +12,6 @@ class RecordCog(commands.Cog):
 
     async def cog_load(self):
         async with aiofiles.open("records.json") as f:
-            print(await f.read())
             self.records = json.loads(await f.read())
 
     @commands.Cog.listener()
