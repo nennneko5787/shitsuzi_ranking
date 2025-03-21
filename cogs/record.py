@@ -28,7 +28,9 @@ class RecordCog(commands.Cog):
             return m.channel == channel
 
         message = await self.bot.wait_for("message", check=check)
-        self.records[message.author.id] = self.records.get(message.author.id, 0) + 1
+        if not message.author.id in self.records:
+            self.records[message.author.id] = 0
+        self.records[message.author.id] += 1
 
         async with aiofiles.open("records.json", "w+") as f:
             await f.write(json.dumps(self.records))
