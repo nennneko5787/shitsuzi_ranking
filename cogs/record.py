@@ -15,6 +15,17 @@ class RecordCog(commands.Cog):
             data = json.loads(await f.read())
             self.records = {int(k): v for k, v in data.items()}
 
+    @commands.command()
+    @commands.cooldown(86400, 1)
+    async def ranking(self, ctx: commands.Context):
+        sortedRecords = sorted(self.records.items(), key=lambda x: x[1], reverse=True)[:5]
+        
+        rankingText = "\n".join(
+            [f"{i+1}位: <@{user_id}> - {count}回" for i, (userId, count) in enumerate(sortedRecords)]
+        )
+
+        await ctx.send(f"## 🏆 **コインロールランキング TOP5** 🏆\n{rankingText}", silent=True)
+
     @commands.Cog.listener()
     async def on_guild_channel_create(self, channel: discord.TextChannel):
         if channel.name != "1day-chat":
