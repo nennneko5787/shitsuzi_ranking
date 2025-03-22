@@ -24,7 +24,7 @@ class RecordCog(commands.Cog):
             [f"{i+1}位: <@{userId}> - {count}回" for i, (userId, count) in enumerate(sortedRecords)]
         )
 
-        await ctx.send(f"## 🏆 **コインロールランキング TOP5** 🏆\n{rankingText}", silent=True)
+        await ctx.reply(f"## 🏆 **コインロールランキング TOP5** 🏆\n{rankingText}", silent=True)
 
     @commands.Cog.listener()
     async def on_guild_channel_create(self, channel: discord.TextChannel):
