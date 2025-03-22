@@ -12,7 +12,8 @@ class RecordCog(commands.Cog):
 
     async def cog_load(self):
         async with aiofiles.open("records.json") as f:
-            self.records = json.loads(await f.read())
+            data = json.loads(await f.read())
+            self.records = {int(k): v for k, v in data.items()}
 
     @commands.Cog.listener()
     async def on_guild_channel_create(self, channel: discord.TextChannel):
