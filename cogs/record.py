@@ -21,7 +21,7 @@ class RecordCog(commands.Cog):
         sortedRecords = sorted(self.records.items(), key=lambda x: x[1], reverse=True)[:5]
         
         rankingText = "\n".join(
-            [f"{i+1}位: <@{user_id}> - {count}回" for i, (userId, count) in enumerate(sortedRecords)]
+            [f"{i+1}位: <@{userId}> - {count}回" for i, (userId, count) in enumerate(sortedRecords)]
         )
 
         await ctx.send(f"## 🏆 **コインロールランキング TOP5** 🏆\n{rankingText}", silent=True)
