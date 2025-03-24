@@ -16,7 +16,7 @@ class RecordCog(commands.Cog):
             self.records = {int(k): v for k, v in data.items()}
 
     @commands.command()
-    @commands.cooldown(86400, 1)
+    @commands.cooldown(1, 86400)
     async def ranking(self, ctx: commands.Context):
         sortedRecords = sorted(self.records.items(), key=lambda x: x[1], reverse=True)[:5]
         
