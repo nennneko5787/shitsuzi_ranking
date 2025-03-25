@@ -34,7 +34,9 @@ class RecordCog(commands.Cog):
         def check(m):
             return m.author.id == 1178247997465837588 and m.channel == channel
 
-        await self.bot.wait_for("message", check=check)
+        message = await self.bot.wait_for("message", check=check)
+
+        before = message.created_at.timestamp()
 
         def check(m):
             return m.channel == channel
@@ -47,7 +49,9 @@ class RecordCog(commands.Cog):
         async with aiofiles.open("records.json", "w+") as f:
             await f.write(json.dumps(self.records))
 
+        between = after.created_at.timestamp() - before
         await channel.send(f"{message.author.mention} さんが**{self.records[message.author.id]}**回目のコインロール獲得です！")
+        await channel.send(f"タイム: {between}秒")
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(RecordCog(bot))
