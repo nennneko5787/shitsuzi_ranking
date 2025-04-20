@@ -32,7 +32,7 @@ class RecordCog(commands.Cog):
             return
 
         def check(m):
-            return m.author.id == 1178247997465837588 and m.channel == channel
+            return m.author.id == 1362354606923059322 and m.channel == channel
 
         message = await self.bot.wait_for("message", check=check)
 
