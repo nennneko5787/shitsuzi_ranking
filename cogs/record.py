@@ -34,9 +34,10 @@ class RecordCog(commands.Cog):
         width, height = 600, 300
         img = Image.new("RGB", (width, height), color=(255, 255, 255))
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype("arial.ttf", 24)  # フォントは環境に合わせて変更
+        font_path = "./fonts/NotoSansJP-Regular.otf"  # フォントのパス
+        font = ImageFont.truetype(font_path, 24)
+        title_font = ImageFont.truetype(font_path, 28)
     
-        title_font = ImageFont.truetype("arial.ttf", 28)
         draw.text((width // 2 - 120, 20), "🏆 コインロールランキング TOP5 🏆", font=title_font, fill=(0, 0, 0))
     
         y_offset = 80
