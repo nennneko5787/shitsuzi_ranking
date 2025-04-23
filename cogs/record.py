@@ -1,9 +1,11 @@
 import json
+import io
 from typing import Dict
 
 import aiofiles
 import discord
 from discord.ext import commands
+from PIL import Image, ImageDraw, ImageFont
 
 class RecordCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -16,15 +18,36 @@ class RecordCog(commands.Cog):
             self.records = {int(k): v for k, v in data.items()}
 
     @commands.command()
-    @commands.cooldown(1, 86400)
     async def ranking(self, ctx: commands.Context):
         sortedRecords = sorted(self.records.items(), key=lambda x: x[1], reverse=True)[:5]
-        
-        rankingText = "\n".join(
-            [f"{i+1}位: {userId} - {count}回" for i, (userId, count) in enumerate(sortedRecords)]
-        )
-
-        await ctx.reply(f"## 🏆 **コインロールランキング TOP5** 🏆\n{rankingText}\n\n-# ここに書いてあるIDを<@(id)>のように囲むことでユーザーを表示することができます", silent=True)
+    
+        # ユーザー名を取得
+        users = []
+        for user_id, count in sortedRecords:
+            user = await self.bot.fetch_user(user_id)
+            users.append((user.name, count))
+    
+        # 画像作成
+        width, height = 600, 300
+        img = Image.new("RGB", (width, height), color=(255, 255, 255))
+        draw = ImageDraw.Draw(img)
+        font = ImageFont.truetype("arial.ttf", 24)  # フォントは環境に合わせて変更
+    
+        title_font = ImageFont.truetype("arial.ttf", 28)
+        draw.text((width // 2 - 120, 20), "🏆 コインロールランキング TOP5 🏆", font=title_font, fill=(0, 0, 0))
+    
+        y_offset = 80
+        for i, (name, count) in enumerate(users):
+            draw.text((50, y_offset), f"{i+1}位: {name} - {count}回", font=font, fill=(0, 0, 0))
+            y_offset += 40
+    
+        # バッファに保存
+        buffer = io.BytesIO()
+        img.save(buffer, format="PNG")
+        buffer.seek(0)
+    
+        file = discord.File(fp=buffer, filename="ranking.png")
+        await ctx.reply(file=file, silent=True)
 
     @commands.Cog.listener()
     async def on_guild_channel_create(self, channel: discord.TextChannel):
