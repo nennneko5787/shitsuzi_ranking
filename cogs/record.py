@@ -24,8 +24,11 @@ class RecordCog(commands.Cog):
         # ユーザー名を取得
         users = []
         for user_id, count in sortedRecords:
-            user = await ctx.guild.fetch_member(user_id)
-            users.append((user.name, count))
+            try:
+                user = await ctx.guild.fetch_member(user_id)
+                users.append((user.name, count))
+            except:
+                users.append((str(user_id), count))
     
         # 画像作成
         width, height = 600, 300
