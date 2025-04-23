@@ -24,7 +24,7 @@ class RecordCog(commands.Cog):
         # ユーザー名を取得
         users = []
         for user_id, count in sortedRecords:
-            user = await self.bot.fetch_user(user_id)
+            user = await ctx.guild.fetch_member(user_id)
             users.append((user.name, count))
     
         # 画像作成
